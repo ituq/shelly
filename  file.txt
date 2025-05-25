@@ -1,0 +1,4 @@
+ file.txt
+main.c
+shelly
+shelly.dSYM

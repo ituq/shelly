@@ -23,11 +23,10 @@ int main(){
         //check for piping final result to file (>)
         int output_fd= STDOUT_FILENO;
         int stdout_saved =-1;
-        char* token=strtok(input, ">");
-        char* fileName= input+len; //start of file name if applicable
-        if(token!=input){
-            fileName=strtok(NULL, " >"); //start of file name if applicable
-            printf("file to write to: '%s'\n",fileName);
+        strtok(input, ">");
+        char* token=strtok(NULL, ">");
+        char* fileName= token ? token : input+len-1; //start of file name if applicable
+        if(token){
             output_fd=open(fileName, O_CREAT | O_WRONLY | O_TRUNC, 0644);
             stdout_saved=dup(STDOUT_FILENO);
             dup2(output_fd, STDOUT_FILENO);
@@ -82,7 +81,7 @@ int main(){
             free(args);
             command =strtok(NULL, "|");
         }
-        
+
         // Restore stdout if it was redirected
         if(stdout_saved != -1) {
             dup2(stdout_saved, STDOUT_FILENO);
